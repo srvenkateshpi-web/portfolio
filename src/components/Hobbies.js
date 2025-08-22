@@ -1,8 +1,8 @@
 import React from "react";
 import { Container, Card, Row, Col } from "react-bootstrap";
-import sketchImg from "../asset/father.png"; // <-- Import your image
-import creativeImg from "../asset/creative.png";
-import readImg from "../asset/read.png";
+import sketchImg from "../assets/father.png"; // <-- Import your image
+import creativeImg from "../assets/creative.png";
+import readImg from "../assets/read.png";
 const hobbies = [
   {
     name: "Sketching",

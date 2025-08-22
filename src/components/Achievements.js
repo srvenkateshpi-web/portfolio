@@ -10,10 +10,10 @@ import {
 } from "react-icons/fa";
 
 // Local images
-import vihasanImg from "../asset/vihasan.JPG";
-import hackImg from "../asset/hack.JPG";
-import avdImg from "../asset/avd.JPG";
-import devImg from "../asset/dev.jpg";
+import vihasanImg from "../assets/vihasan.JPG";
+import hackImg from "../assets/hack.JPG";
+import avdImg from "../assets/avd.JPG";
+import devImg from "../assets/dev.jpg";
 
 const accentColor = "#fd0054";
 

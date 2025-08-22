@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-scroll";
-import logo from "../asset/logo.JPG"; // Adjust the path as needed
+import logo from "../assets/logo.JPG"; // Adjust the path as needed
 
 const accentColor = "#fd0054";
 
