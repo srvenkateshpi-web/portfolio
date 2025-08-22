@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { motion } from "framer-motion";
-import profilePic from "/Users/venkateshsr/Desktop/portfolio/src/components/asset/new4.png"; // <-- Import your image
+import profilePic from "../asset/new4.png"; // <-- Import your image
 
 const backgroundColor = "#232329";
 const textColor = "#fff";

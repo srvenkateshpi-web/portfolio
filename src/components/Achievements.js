@@ -10,10 +10,10 @@ import {
 } from "react-icons/fa";
 
 // Local images
-import vihasanImg from "/Users/venkateshsr/Desktop/portfolio/src/components/asset/vihasan.JPG";
-import hackImg from "/Users/venkateshsr/Desktop/portfolio/src/components/asset/hack.JPG";
-import avdImg from "/Users/venkateshsr/Desktop/portfolio/src/components/asset/avd.JPG";
-import devImg from "/Users/venkateshsr/Desktop/portfolio/src/components/asset/dev.jpg";
+import vihasanImg from "../asset/vihasan.JPG";
+import hackImg from "../asset/hack.JPG";
+import avdImg from "../asset/avd.JPG";
+import devImg from "../asset/dev.jpg";
 
 const accentColor = "#fd0054";
 

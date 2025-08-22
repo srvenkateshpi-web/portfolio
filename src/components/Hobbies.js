@@ -1,8 +1,8 @@
 import React from "react";
 import { Container, Card, Row, Col } from "react-bootstrap";
-import sketchImg from "/Users/venkateshsr/Desktop/portfolio/src/components/asset/father.png"; // <-- Import your image
-import creativeImg from "/Users/venkateshsr/Desktop/portfolio/src/components/asset/creative.png";
-import readImg from "/Users/venkateshsr/Desktop/portfolio/src/components/asset/read.png";
+import sketchImg from "../asset/father.png"; // <-- Import your image
+import creativeImg from "../asset/creative.png";
+import readImg from "../asset/read.png";
 const hobbies = [
   {
     name: "Sketching",
