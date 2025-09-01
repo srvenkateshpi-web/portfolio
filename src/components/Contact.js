@@ -6,6 +6,7 @@ import {
   FaGithub,
   FaFileDownload,
 } from "react-icons/fa";
+import resumePDF from "../assets/resume.pdf"; // import PDF from src/assets
 
 const accentColor = "#fd0054";
 
@@ -15,8 +16,7 @@ const socialButtons = [
   { icon: <FaGithub />, href: "https://github.com/Suberna" },
   {
     icon: <FaFileDownload />,
-    href: "/Suberna_Rajaram_Resume.pdf",
-    download: true,
+    href: resumePDF, // use imported PDF
   },
 ];
 
@@ -61,8 +61,7 @@ function Contact() {
                 <a
                   key={idx}
                   href={btn.href}
-                  download={btn.download || false}
-                  target={btn.href.startsWith("mailto:") ? "_self" : "_blank"}
+                  target={btn.href.startsWith("mailto:") ? "_self" : "_blank"} // open in new tab
                   rel="noopener noreferrer"
                   style={{
                     background: "#18181b",
@@ -119,7 +118,7 @@ function Contact() {
               <Form.Group className="mb-2">
                 <Form.Control
                   type="text"
-                  placeholder="Your Name"
+                  placeholder="Enter your full name"
                   style={{
                     backgroundColor: "#232329",
                     color: "#fff",
@@ -133,7 +132,7 @@ function Contact() {
               <Form.Group className="mb-2">
                 <Form.Control
                   type="email"
-                  placeholder="Your Email"
+                  placeholder="Enter your email address"
                   style={{
                     backgroundColor: "#232329",
                     color: "#fff",
@@ -148,7 +147,7 @@ function Contact() {
                 <Form.Control
                   as="textarea"
                   rows={3}
-                  placeholder="Your Message"
+                  placeholder="Type your message here"
                   style={{
                     backgroundColor: "#232329",
                     color: "#fff",
@@ -181,6 +180,16 @@ function Contact() {
           </p>
         </div>
       </Container>
+
+      {/* Global placeholder CSS */}
+      <style>
+        {`
+          ::placeholder {
+            color: #b0bec5 !important;
+            opacity: 1;
+          }
+        `}
+      </style>
     </section>
   );
 }

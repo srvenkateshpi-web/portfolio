@@ -8,6 +8,8 @@ import {
   FaDownload,
 } from "react-icons/fa";
 
+import resumePDF from "../assets/resume.pdf";
+
 const accentColor = "#fd0054"; // Your highlight color
 
 const socialLinks = [
@@ -27,8 +29,8 @@ function Hero() {
         display: "flex",
         alignItems: "center",
         paddingLeft: "6vw",
-        paddingBottom: "-2rem", // reduce bottom padding from 3rem or remove if exists
-        marginBottom: 0, // ensure margin below is zero
+        paddingBottom: "-2rem",
+        marginBottom: 0,
       }}
     >
       <div style={{ flex: 2 }}>
@@ -85,6 +87,8 @@ function Hero() {
           make a difference together!
         </p>
       </div>
+
+      {/* Right Side Section */}
       <div style={{ flex: 1 }}>
         <div
           style={{
@@ -95,6 +99,7 @@ function Hero() {
             marginBottom: 16,
           }}
         >
+          {/* Social Links */}
           <div>
             <div style={{ color: "#b0bec5", marginBottom: 10 }}>FIND ME IN</div>
             <div style={{ display: "flex", gap: 10 }}>
@@ -130,13 +135,15 @@ function Hero() {
               ))}
             </div>
           </div>
+
+          {/* Resume Download */}
           <div style={{ marginLeft: 30 }}>
             <div style={{ color: "#b0bec5", marginBottom: 10 }}>
               DOWNLOAD RESUME
             </div>
             <a
-              href="https://pdf.ac/6lIar35Rd2"
-              target="_blank"
+              href={resumePDF} // ✅ Use imported PDF
+              target="_blank" // ✅ open in new tab
               rel="noopener noreferrer"
               style={{
                 background: "#18181b",
