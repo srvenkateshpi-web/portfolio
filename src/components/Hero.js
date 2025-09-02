@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ReactTyped } from "react-typed";
 import {
   FaEnvelope,
@@ -7,10 +7,9 @@ import {
   FaGithub,
   FaDownload,
 } from "react-icons/fa";
-
 import resumePDF from "../assets/resume.pdf";
 
-const accentColor = "#fd0054"; // Your highlight color
+const accentColor = "#fd0054";
 
 const socialLinks = [
   { icon: <FaEnvelope />, link: "mailto:subernasrajaram@gmail.com" },
@@ -20,30 +19,92 @@ const socialLinks = [
 ];
 
 function Hero() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isTablet = windowWidth <= 1024;
+  const isMobile = windowWidth <= 768;
+  const isTiny = windowWidth <= 400;
+
+  const leftFontSize = isTiny
+    ? "5vw"
+    : isMobile
+    ? "4vw"
+    : isTablet
+    ? "2vw"
+    : "1.4vw";
+  const headingFontSize = isTiny
+    ? "10vw"
+    : isMobile
+    ? "8vw"
+    : isTablet
+    ? "4vw"
+    : "3vw";
+  const subHeadingFontSize = isTiny
+    ? "8vw"
+    : isMobile
+    ? "6vw"
+    : isTablet
+    ? "3vw"
+    : "3vw";
+  const typedFontSize = isTiny
+    ? "6vw"
+    : isMobile
+    ? "5vw"
+    : isTablet
+    ? "2.5vw"
+    : "2vw";
+  const paragraphFontSize = isTiny
+    ? "5vw"
+    : isMobile
+    ? "4vw"
+    : isTablet
+    ? "1.5vw"
+    : "1.2vw";
+  const iconSize = isTiny ? 18 : isMobile ? 20 : 28;
+  const iconDim = isTiny ? 40 : isMobile ? 45 : 48;
+  const iconMarginTop = isMobile ? 10 : 20;
+
   return (
     <div
       style={{
         background: "#232329",
-        minHeight: "85vh",
+        minHeight: isTiny ? "95vh" : isMobile ? "90vh" : "70vh",
         color: "#fff",
         display: "flex",
+        flexWrap: "wrap",
         alignItems: "center",
-        paddingLeft: "6vw",
-        paddingBottom: "-2rem",
-        marginBottom: 0,
+        justifyContent: isMobile ? "center" : "flex-start",
+        padding: isTiny ? "6vw 3vw" : isMobile ? "6vw 4vw" : "4vw 6vw",
       }}
     >
-      <div style={{ flex: 2 }}>
-        <p style={{ letterSpacing: 2, color: "#d1d8e0" }}>
+      {/* Left Side */}
+      <div
+        style={{
+          flex: 2,
+          minWidth: 280,
+          fontSize: leftFontSize,
+          marginBottom: isMobile ? 20 : 0,
+          textAlign: isMobile ? "center" : "left",
+        }}
+      >
+        <p
+          style={{ letterSpacing: 2, color: "#d1d8e0", fontSize: leftFontSize }}
+        >
           WELCOME TO MY WORLD
         </p>
-        <h1 style={{ fontWeight: 700, fontSize: "3vw", margin: 0 }}>
+        <h1 style={{ fontWeight: 700, fontSize: headingFontSize, margin: 0 }}>
           Hi, I'm <span style={{ color: accentColor }}>Suberna R S</span>
         </h1>
         <h1
           style={{
             fontWeight: 700,
-            fontSize: "3vw",
+            fontSize: subHeadingFontSize,
             margin: 0,
             color: accentColor,
           }}
@@ -53,19 +114,21 @@ function Hero() {
         <div
           style={{
             fontWeight: 700,
-            fontSize: "2vw",
+            fontSize: typedFontSize,
             color: "#fff",
             display: "flex",
+            justifyContent: isMobile ? "center" : "flex-start",
             alignItems: "center",
             marginTop: 18,
           }}
         >
           <ReactTyped
             strings={[
-              "Machine Learning Developer",
+              "Machine Learning Developer !",
               "Web Developer",
-              "Problem Solver",
+              "Problem Solver !",
               "Hackathon Winner",
+              "AI Enthusiast",
             ]}
             typeSpeed={60}
             backSpeed={35}
@@ -74,10 +137,10 @@ function Hero() {
         </div>
         <p
           style={{
-            maxWidth: 500,
-            marginTop: 24,
+            maxWidth: isMobile ? "100%" : 500,
+            marginTop: 20,
             color: "#b0bec5",
-            fontSize: "1.2vw",
+            fontSize: paragraphFontSize,
             fontWeight: 400,
             letterSpacing: 0.5,
           }}
@@ -88,21 +151,104 @@ function Hero() {
         </p>
       </div>
 
-      {/* Right Side Section */}
-      <div style={{ flex: 1 }}>
+      {/* Right Side */}
+      {isMobile ? (
         <div
           style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 12,
+            flexWrap: "wrap",
+            marginTop: iconMarginTop,
+          }}
+        >
+          {socialLinks.map((s, idx) => (
+            <a
+              key={idx}
+              href={s.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: "#18181b",
+                borderRadius: 8,
+                color: "#fff",
+                fontSize: iconSize,
+                width: iconDim,
+                height: iconDim,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 2px 6px 0 #0002",
+                textDecoration: "none",
+                transition: "background 0.2s",
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.background = accentColor)
+              }
+              onMouseOut={(e) => (e.currentTarget.style.background = "#18181b")}
+            >
+              {s.icon}
+            </a>
+          ))}
+          <a
+            href={resumePDF}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              background: "#18181b",
+              borderRadius: 8,
+              color: "#fff",
+              fontSize: iconSize,
+              width: iconDim,
+              height: iconDim,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 2px 6px 0 #0002",
+              textDecoration: "none",
+              transition: "background 0.2s",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.background = accentColor)
+            }
+            onMouseOut={(e) => (e.currentTarget.style.background = "#18181b")}
+          >
+            <FaDownload />
+          </a>
+        </div>
+      ) : (
+        // Desktop layout untouched
+        <div
+          style={{
+            flex: 1,
+            minWidth: 0,
             display: "flex",
             flexDirection: "row",
             justifyContent: "flex-end",
             gap: 24,
-            marginBottom: 16,
+            marginTop: 20,
+            flexWrap: "wrap",
           }}
         >
-          {/* Social Links */}
-          <div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
             <div style={{ color: "#b0bec5", marginBottom: 10 }}>FIND ME IN</div>
-            <div style={{ display: "flex", gap: 10 }}>
+            <div
+              style={{
+                display: "flex",
+                gap: 10,
+                flexWrap: "wrap",
+                justifyContent: "flex-start",
+              }}
+            >
               {socialLinks.map((s, idx) => (
                 <a
                   key={idx}
@@ -120,15 +266,15 @@ function Hero() {
                     alignItems: "center",
                     justifyContent: "center",
                     boxShadow: "0 2px 6px 0 #0002",
-                    transition: "background 0.2s",
                     textDecoration: "none",
+                    transition: "background 0.2s",
                   }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.background = accentColor;
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.background = "#18181b";
-                  }}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.background = accentColor)
+                  }
+                  onMouseOut={(e) =>
+                    (e.currentTarget.style.background = "#18181b")
+                  }
                 >
                   {s.icon}
                 </a>
@@ -136,14 +282,11 @@ function Hero() {
             </div>
           </div>
 
-          {/* Resume Download */}
-          <div style={{ marginLeft: 30 }}>
-            <div style={{ color: "#b0bec5", marginBottom: 10 }}>
-              DOWNLOAD RESUME
-            </div>
+          <div style={{ marginLeft: 10 }}>
+            <div style={{ color: "#b0bec5", marginBottom: 10 }}>RESUME</div>
             <a
-              href={resumePDF} // ✅ Use imported PDF
-              target="_blank" // ✅ open in new tab
+              href={resumePDF}
+              target="_blank"
               rel="noopener noreferrer"
               style={{
                 background: "#18181b",
@@ -157,19 +300,18 @@ function Hero() {
                 justifyContent: "center",
                 boxShadow: "0 2px 6px 0 #0002",
                 textDecoration: "none",
+                transition: "background 0.2s",
               }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.background = accentColor;
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.background = "#18181b";
-              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.background = accentColor)
+              }
+              onMouseOut={(e) => (e.currentTarget.style.background = "#18181b")}
             >
               <FaDownload />
             </a>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
