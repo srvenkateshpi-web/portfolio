@@ -74,13 +74,12 @@ function Hero() {
     <div
       style={{
         background: "#232329",
-        minHeight: isTiny ? "95vh" : isMobile ? "90vh" : "70vh",
         color: "#fff",
         display: "flex",
         flexWrap: "wrap",
-        alignItems: "center",
+        alignItems: "flex-start", // removes vertical centering
         justifyContent: isMobile ? "center" : "flex-start",
-        padding: isTiny ? "6vw 3vw" : isMobile ? "6vw 4vw" : "4vw 6vw",
+        padding: isTiny ? "8vw 3vw" : isMobile ? "8vw 4vw" : "6vw 6vw",
       }}
     >
       {/* Left Side */}
@@ -155,7 +154,7 @@ function Hero() {
       {isMobile ? (
         <div
           style={{
-            flex: 1,
+            width: "100%",
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
@@ -220,7 +219,7 @@ function Hero() {
           </a>
         </div>
       ) : (
-        // Desktop layout untouched
+        // Desktop layout
         <div
           style={{
             flex: 1,
