@@ -1,17 +1,17 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { motion } from "framer-motion";
-import profilePic from "../assets/new4.png"; // <-- Import your image
+import profilePic from "../assets/new4.png";
 
 const backgroundColor = "#232329";
 const textColor = "#fff";
 const accentColor = "#fd0054";
 
-function BlobImage() {
+function BlobImage({ width, height }) {
   return (
     <svg
-      width="340"
-      height="300"
+      width={width}
+      height={height}
       viewBox="0 0 200 187"
       xmlns="http://www.w3.org/2000/svg"
       style={{ display: "block", margin: "auto" }}
@@ -44,7 +44,7 @@ function BlobImage() {
           y="-46"
           width="350"
           height="280"
-          href={profilePic} // <-- Use imported image
+          href={profilePic}
           preserveAspectRatio="xMidYMid slice"
           alt="Profile"
         />
@@ -61,73 +61,83 @@ export default function About() {
       transition={{ duration: 0.8 }}
       id="about"
       className="py-5"
-      style={{
-        backgroundColor: backgroundColor,
-        color: textColor,
-      }}
+      style={{ backgroundColor, color: textColor }}
     >
       <Container>
         <h2
           style={{
-            marginBottom: "2rem",
+            marginBottom: "2.5rem",
             fontWeight: "700",
             color: accentColor,
-            letterSpacing: 1.5,
+            letterSpacing: 2,
             textTransform: "uppercase",
+            textAlign: "center",
           }}
         >
           About Me
         </h2>
+
         <Row className="align-items-center">
+          {/* Image Column */}
           <Col
-            md={5}
+            xs={12}
+            md={5} // image slightly smaller on MD
             className="mb-4 mb-md-0"
             style={{
               display: "flex",
-              flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              textAlign: "center",
             }}
           >
-            <BlobImage />
+            <BlobImage width="280" height="250" />
           </Col>
+
+          {/* Text Column */}
           <Col
-            md={7}
+            xs={12}
+            md={7} // text column proportionally bigger
             style={{
-              textAlign: "justify",
-              fontSize: "1.18rem",
-              lineHeight: 1.7,
-              paddingLeft: "2rem",
+              textAlign: "center", // small screens
+              fontSize: "clamp(0.95rem, 1vw + 0.5rem, 1.2rem)",
+              lineHeight: 1.8,
+              padding: "0 1rem",
+              maxWidth: "650px",
+              margin: "0 auto",
             }}
+            className="text-md-start px-md-3"
           >
-            <p>
+            <p style={{ marginBottom: "1rem" }}>
               I’m an{" "}
               <strong style={{ color: accentColor }}>
                 Artificial Intelligence
               </strong>{" "}
               and <strong style={{ color: accentColor }}>Data Science</strong>{" "}
               enthusiast passionate about transforming data into actionable
-              insights and innovative solutions. With solid expertise in{" "}
+              insights and innovative solutions.
+            </p>
+            <p style={{ marginBottom: "1rem" }}>
+              With solid expertise in{" "}
               <strong style={{ color: accentColor }}>
                 machine learning, analytics, and full-stack development
               </strong>
               , I strive to build impactful projects that deliver real-world
               value.
             </p>
-            <p>
+            <p style={{ marginBottom: "1rem" }}>
               My journey spans diverse projects, from AI-powered traffic
               violation detection systems enhancing road safety to smart
-              healthcare management tools optimizing patient care. I’m driven by
-              curiosity, collaboration, and a passion for continuous learning.
+              healthcare management tools optimizing patient care.
             </p>
-            <p>
-              Outside of programming,{" "}
+            <p style={{ marginBottom: "1rem" }}>
+              I’m driven by curiosity, collaboration, and a passion for
+              continuous learning. Outside of programming,{" "}
               <strong style={{ color: accentColor }}>
                 sketching and creative design
               </strong>{" "}
-              inspire me to bring creativity and empathy into technology. Let’s
-              connect and build transformative experiences together.
+              inspire me to bring creativity and empathy into technology.
+            </p>
+            <p style={{ marginBottom: "1rem" }}>
+              Let’s connect and build transformative experiences together.
             </p>
           </Col>
         </Row>
