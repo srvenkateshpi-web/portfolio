@@ -1,21 +1,13 @@
 import React from "react";
 import { Container, Card, Row, Col } from "react-bootstrap";
-import sketchImg from "../assets/father.png"; // <-- Import your image
+import sketchImg from "../assets/father.png";
 import creativeImg from "../assets/creative.png";
 import readImg from "../assets/read.png";
+
 const hobbies = [
-  {
-    name: "Sketching",
-    img: sketchImg, // example sketching icon
-  },
-  {
-    name: "Creative Designing",
-    img: creativeImg, // example design icon
-  },
-  {
-    name: "Bibliophilia",
-    img: readImg, // example book icon
-  },
+  { name: "Sketching", img: sketchImg },
+  { name: "Creative Designing", img: creativeImg },
+  { name: "Bibliophilia", img: readImg },
 ];
 
 function Hobbies() {
@@ -52,10 +44,11 @@ function Hobbies() {
         />
       </h2>
 
-      <Row className="justify-content-center" style={{ gap: "20px" }}>
+      <Row className="justify-content-center hobby-row" style={{ gap: "20px" }}>
         {hobbies.map((hobby, idx) => (
-          <Col key={idx} xs={10} sm={6} md={4} lg={3}>
+          <Col key={idx} xs={4} sm={4} md={4} lg={3}>
             <Card
+              className="hobby-card"
               style={{
                 padding: "20px",
                 borderRadius: "12px",
@@ -77,6 +70,7 @@ function Hobbies() {
                 variant="top"
                 src={hobby.img}
                 alt={hobby.name}
+                className="hobby-img"
                 style={{
                   width: "80px",
                   height: "80px",
@@ -86,7 +80,12 @@ function Hobbies() {
               />
               <Card.Body>
                 <Card.Title
-                  style={{ fontWeight: 600, fontSize: "1.2rem", color: "#333" }}
+                  className="hobby-title"
+                  style={{
+                    fontWeight: 600,
+                    fontSize: "1.2rem",
+                    color: "#333",
+                  }}
                 >
                   {hobby.name}
                 </Card.Title>
@@ -95,6 +94,37 @@ function Hobbies() {
           </Col>
         ))}
       </Row>
+
+      {/* Small screen adjustments only */}
+      <style>
+        {`
+  @media (max-width: 576px) {
+    .hobby-card {
+      padding: 6px !important; /* reduce padding */
+    }
+    .hobby-img {
+      width: 35px !important;
+      height: 35px !important;
+    }
+    .hobby-title {
+      font-size: 0.45rem !important; /* small enough to fit one line */
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+    .hobby-row {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      justify-content: center !important;
+      gap: 5px !important; /* smaller gap for better fit */
+    }
+    .hobby-row > .col-4 {
+      flex: 1 1 auto !important;
+      max-width: calc(33.333% - 5px) !important; /* adjust for gap */
+    }
+  }
+`}
+      </style>
     </Container>
   );
 }
