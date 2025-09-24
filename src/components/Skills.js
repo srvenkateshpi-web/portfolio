@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Container, Card } from "react-bootstrap";
 import {
   FaPython,
@@ -100,6 +100,9 @@ const certificates = [
 function Skills() {
   const [hoveredSkill, setHoveredSkill] = useState(null);
   const [activeCert, setActiveCert] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+  const certificatesRef = useRef(null);
 
   const skills = [
     "Python",
@@ -115,11 +118,44 @@ function Skills() {
 
   const scrollSkills = skills.concat(skills);
 
+  // Check screen size
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const width = window.innerWidth;
+      setIsMobile(width <= 576);
+      setIsTablet(width > 576 && width <= 992);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  // Auto-scroll certificates to keep active one visible
+  useEffect(() => {
+    if (certificatesRef.current) {
+      const container = certificatesRef.current;
+      const activeElement = container.children[activeCert];
+
+      if (activeElement) {
+        const containerWidth = container.offsetWidth;
+        const elementWidth = activeElement.offsetWidth;
+        const elementLeft = activeElement.offsetLeft;
+        const scrollLeft = elementLeft - containerWidth / 2 + elementWidth / 2;
+
+        container.scrollTo({
+          left: Math.max(0, scrollLeft),
+          behavior: "smooth",
+        });
+      }
+    }
+  }, [activeCert]);
+
   // Automatic certificate rotation every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveCert((prev) => (prev + 1) % certificates.length);
-    }, 3000); // Change 3000 to any number for slower/faster rotation
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -130,20 +166,24 @@ function Skills() {
         backgroundColor,
         color: "#fff",
         width: "100%",
-        padding: "3rem 1rem",
+        padding: isMobile
+          ? "2rem 0.5rem"
+          : isTablet
+          ? "2.5rem 1rem"
+          : "3rem 1rem",
         fontFamily: "'Poppins', sans-serif",
         overflow: "hidden",
       }}
     >
-      <Container>
+      <Container fluid={isMobile}>
         <h2
           style={{
             color: accentColor,
             textTransform: "uppercase",
             fontWeight: 700,
-            letterSpacing: 1.5,
-            marginBottom: "2rem",
-            fontSize: "2rem",
+            letterSpacing: isMobile ? 1 : 1.5,
+            marginBottom: isMobile ? "1.5rem" : "2rem",
+            fontSize: isMobile ? "1.5rem" : isTablet ? "1.75rem" : "2rem",
             textAlign: "center",
           }}
         >
@@ -152,14 +192,21 @@ function Skills() {
 
         {/* Skills Carousel */}
         <div
-          style={{ display: "flex", overflow: "hidden", position: "relative" }}
+          style={{
+            display: "flex",
+            overflow: "hidden",
+            position: "relative",
+            marginBottom: isMobile ? "1.5rem" : "2rem",
+          }}
         >
           <div
             className="skills-scroll"
             style={{
               display: "flex",
-              gap: "16px",
-              animation: "scroll 15s linear infinite",
+              gap: isMobile ? "8px" : isTablet ? "12px" : "16px",
+              animation: isMobile
+                ? "scroll 20s linear infinite"
+                : "scroll 15s linear infinite",
             }}
           >
             {scrollSkills.map((skill, idx) => {
@@ -173,29 +220,39 @@ function Skills() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: "8px",
-                    padding: "12px 20px",
-                    borderRadius: "12px",
+                    gap: isMobile ? "4px" : "8px",
+                    padding: isMobile
+                      ? "8px 12px"
+                      : isTablet
+                      ? "10px 16px"
+                      : "12px 20px",
+                    borderRadius: isMobile ? "8px" : "12px",
                     backgroundColor: isHovered ? accentColor : "#111",
                     transition:
                       "transform 0.3s, background-color 0.3s, color 0.3s",
                     transform: isHovered ? "scale(1.1)" : "scale(1)",
                     cursor: "pointer",
-                    minWidth: skill === "C" ? "130px" : "130px",
+                    minWidth: isMobile ? "100px" : isTablet ? "115px" : "130px",
                     color: "#fff",
+                    flexDirection: isMobile ? "column" : "row",
                   }}
                   onMouseEnter={() => setHoveredSkill(idx)}
                   onMouseLeave={() => setHoveredSkill(null)}
                 >
                   <IconComponent
-                    size={30}
+                    size={isMobile ? 20 : isTablet ? 25 : 30}
                     color={isHovered ? "#fff" : iconDefaultColors[skill]}
                   />
                   <span
                     style={{
                       fontWeight: 600,
-                      fontSize: "1.2rem",
+                      fontSize: isMobile
+                        ? "0.8rem"
+                        : isTablet
+                        ? "1rem"
+                        : "1.2rem",
                       color: "#fff",
+                      textAlign: "center",
                     }}
                   >
                     {skill === "C" ? "Program" : skill}
@@ -210,20 +267,23 @@ function Skills() {
         <div
           style={{
             display: "flex",
-            marginTop: "2rem",
-            gap: "20px",
-            alignItems: "center",
-            flexWrap: "nowrap",
+            flexDirection: isMobile ? "column" : "row",
+            gap: isMobile ? "15px" : "20px",
+            alignItems: isMobile ? "center" : "flex-start",
           }}
         >
-          {/* Certificate Details Scrollable */}
+          {/* Certificate Details */}
           <div
+            ref={certificatesRef}
             style={{
               display: "flex",
               overflowX: "auto",
-              gap: "20px",
+              gap: isMobile ? "10px" : "20px",
               flex: 1,
               paddingBottom: "10px",
+              width: isMobile ? "100%" : "auto",
+              order: isMobile ? 2 : 1,
+              scrollBehavior: "smooth",
             }}
             aria-label="Certificates List"
           >
@@ -237,12 +297,13 @@ function Skills() {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    minWidth: "180px",
+                    minWidth: isMobile ? "140px" : isTablet ? "160px" : "180px",
                     cursor: "pointer",
                     outline: "none",
                     color: idx === activeCert ? "#fff" : "#aaa",
                     fontWeight: 600,
-                    gap: "8px",
+                    gap: isMobile ? "6px" : "8px",
+                    padding: isMobile ? "8px" : "0",
                   }}
                   onMouseEnter={() => setActiveCert(idx)}
                   onFocus={() => setActiveCert(idx)}
@@ -250,8 +311,8 @@ function Skills() {
                 >
                   <div
                     style={{
-                      width: 44,
-                      height: 44,
+                      width: isMobile ? 36 : isTablet ? 40 : 44,
+                      height: isMobile ? 36 : isTablet ? 40 : 44,
                       backgroundColor:
                         idx === activeCert ? accentColor : "#666",
                       borderRadius: "50%",
@@ -263,7 +324,7 @@ function Skills() {
                         idx === activeCert
                           ? `0 0 12px ${accentColor}cc`
                           : "none",
-                      fontSize: "20px",
+                      fontSize: isMobile ? "16px" : isTablet ? "18px" : "20px",
                       flexShrink: 0,
                       transition: "all 0.3s",
                     }}
@@ -274,32 +335,44 @@ function Skills() {
                     style={{
                       textAlign: "center",
                       margin: 0,
-                      fontSize: "1rem",
+                      fontSize: isMobile
+                        ? "0.75rem"
+                        : isTablet
+                        ? "0.875rem"
+                        : "1rem",
+                      lineHeight: isMobile ? 1.3 : 1.4,
                     }}
                   >
                     <strong style={{ color: accentColor }}>{cert.title}</strong>{" "}
                     <br />
-                    {cert.platform} - {cert.date}
+                    <span style={{ fontSize: isMobile ? "0.7rem" : "0.85rem" }}>
+                      {cert.platform} - {cert.date}
+                    </span>
                   </p>
                 </div>
               );
             })}
           </div>
 
-          {/* Fixed Certificate Image */}
+          {/* Certificate Image */}
           <Card
             style={{
-              width: "320px",
+              width: isMobile ? "280px" : isTablet ? "300px" : "320px",
+              maxWidth: isMobile ? "90vw" : "none",
               boxShadow: `0 8px 30px ${accentColor}44`,
-              borderRadius: "16px",
+              borderRadius: isMobile ? "12px" : "16px",
               overflow: "hidden",
               flexShrink: 0,
+              order: isMobile ? 1 : 2,
             }}
           >
             <Card.Img
               src={certificates[activeCert]?.image}
               alt="Certificate Preview"
-              style={{ height: "220px", objectFit: "cover" }}
+              style={{
+                height: isMobile ? "180px" : isTablet ? "200px" : "220px",
+                objectFit: "cover",
+              }}
             />
           </Card>
         </div>
@@ -324,10 +397,60 @@ function Skills() {
           border-radius: 3px;
         }
 
-        @media (max-width: 768px) {
+        /* Mobile specific styles */
+        @media (max-width: 576px) {
           .skills-scroll {
-            animation: scroll 20s linear infinite;
+            animation: scroll 25s linear infinite;
           }
+          
+          /* Touch-friendly tap targets */
+          div[aria-label="Certificates List"] > div {
+            min-height: 44px;
+          }
+          
+          /* Better touch scrolling */
+          div[aria-label="Certificates List"] {
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+          }
+        }
+
+        /* Tablet specific styles */
+        @media (min-width: 577px) and (max-width: 992px) {
+          .skills-scroll {
+            animation: scroll 18s linear infinite;
+          }
+        }
+
+        /* Desktop styles */
+        @media (min-width: 993px) {
+          .skills-scroll {
+            animation: scroll 15s linear infinite;
+          }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+          div[style*="background-color: #111"] {
+            border: 1px solid #fff;
+          }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+          .skills-scroll {
+            animation: none;
+          }
+          
+          div {
+            transition: none !important;
+          }
+        }
+
+        /* Focus management for accessibility */
+        div[tabindex="0"]:focus {
+          outline: 2px solid ${accentColor};
+          outline-offset: 2px;
         }
       `}</style>
     </div>

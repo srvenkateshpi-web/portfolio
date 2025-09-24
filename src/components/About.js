@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { motion } from "framer-motion";
 import profilePic from "../assets/new4.png";
@@ -6,6 +6,19 @@ import profilePic from "../assets/new4.png";
 const backgroundColor = "#232329";
 const textColor = "#fff";
 const accentColor = "#fd0054";
+
+// 🔹 Custom hook to track window width
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return width;
+}
 
 function BlobImage({ width, height }) {
   return (
@@ -54,6 +67,18 @@ function BlobImage({ width, height }) {
 }
 
 export default function About() {
+  const screenWidth = useWindowWidth();
+
+  // Default size
+  let blobWidth = 280;
+  let blobHeight = 250;
+
+  // If large screen (≥ 992px like Bootstrap lg), make it bigger
+  if (screenWidth >= 992) {
+    blobWidth = 400;
+    blobHeight = 360;
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -81,23 +106,18 @@ export default function About() {
           {/* Image Column */}
           <Col
             xs={12}
-            md={5} // image slightly smaller on MD
-            className="mb-4 mb-md-0"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+            md={5}
+            className="mb-4 mb-md-0 d-flex justify-content-center align-items-center"
           >
-            <BlobImage width="280" height="250" />
+            <BlobImage width={blobWidth} height={blobHeight} />
           </Col>
 
           {/* Text Column */}
           <Col
             xs={12}
-            md={7} // text column proportionally bigger
+            md={7}
             style={{
-              textAlign: "center", // small screens
+              textAlign: "center",
               fontSize: "clamp(0.95rem, 1vw + 0.5rem, 1.2rem)",
               lineHeight: 1.8,
               padding: "0 1rem",
