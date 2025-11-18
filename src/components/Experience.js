@@ -11,7 +11,7 @@ const experiences = [
     role: "Machine Learning Intern",
     tagline: "AI-Driven Learning Insights",
     description:
-      "Built an AI tool using Random Forest to analyze learning styles, deployed via Streamlit with Python, pandas, and scikit-learn.",
+      "Built an AI tool using Random Forest to analyze learning styles, deployed via Streamlit using Python, pandas, and scikit-learn.",
     icon: <FaBrain />,
   },
   {
@@ -53,8 +53,8 @@ function ExperienceWave() {
         fontFamily: "'Poppins', sans-serif",
         padding: "4rem 1rem",
         background: "#f5f5f5",
-        overflowX: "auto",
         position: "relative",
+        transition: "padding .35s ease-in-out",
       }}
     >
       <h2
@@ -62,9 +62,10 @@ function ExperienceWave() {
           textAlign: "center",
           marginBottom: "3rem",
           fontWeight: 700,
-          fontSize: "2.2rem",
+          fontSize: "clamp(1.6rem, 2.6vw, 2.2rem)",
           color: accentColor,
           position: "relative",
+          transition: "font-size .4s ease-in-out",
         }}
       >
         Experience
@@ -78,13 +79,15 @@ function ExperienceWave() {
             height: "3px",
             backgroundColor: accentColor,
             borderRadius: "2px",
+            transition: "width .35s ease-in-out",
           }}
         />
       </h2>
 
-      {/* Moving Wave Line */}
+      {/* Wave Line for Desktop Only */}
       <svg
         viewBox="0 0 1000 120"
+        className="wave-line"
         style={{
           position: "absolute",
           top: "50%",
@@ -92,6 +95,7 @@ function ExperienceWave() {
           width: "100%",
           height: "120px",
           zIndex: 0,
+          transition: "height .35s ease-in-out",
         }}
       >
         <path
@@ -103,87 +107,41 @@ function ExperienceWave() {
         />
       </svg>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "clamp(30px, 8vw, 80px)",
-          padding: "60px 0",
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
+      <div className="exp-wrapper">
         {experiences.map((exp, idx) => {
           const isEven = idx % 2 === 0;
           return (
             <div
               key={idx}
+              className={`exp-card ${isEven ? "even" : "odd"}`}
               onMouseEnter={() => setFlippedIndex(idx)}
               onMouseLeave={() => setFlippedIndex(null)}
+              onClick={() => setFlippedIndex(flippedIndex === idx ? null : idx)}
               style={{
-                flex: "0 0 clamp(200px, 22vw, 240px)",
-                transform: `translateY(${isEven ? "-50px" : "50px"})`,
-                transition: "transform 0.3s ease-in-out",
-                perspective: "1000px",
+                transition: "transform .4s ease-in-out, width .4s ease-in-out",
               }}
             >
+              {/* Flip Container */}
               <div
+                className="flip-box"
                 style={{
-                  position: "relative",
-                  width: "100%",
-                  height: "200px",
-                  transformStyle: "preserve-3d",
-                  transition: "transform 0.6s",
-                  transform: flippedIndex === idx ? "rotateY(180deg)" : "rotateY(0deg)",
+                  transition: "transform .6s ease-in-out",
+                  transform:
+                    flippedIndex === idx ? "rotateY(180deg)" : "rotateY(0deg)",
                 }}
               >
                 {/* Front */}
-                <Card
-                  style={{
-                    position: "absolute",
-                    width: "100%",
-                    height: "100%",
-                    backfaceVisibility: "hidden",
-                    borderRadius: "16px",
-                    boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
-                    backgroundColor: "#fff",
-                    textAlign: "center",
-                    padding: "20px",
-                  }}
-                >
-                  <div style={{ fontSize: "2rem", color: accentColor, marginBottom: "10px" }}>
-                    {exp.icon}
-                  </div>
-                  <Card.Title style={{ fontWeight: 700 }}>{exp.company}</Card.Title>
-                  <Card.Subtitle
-                    style={{ color: accentColor, fontWeight: 500, marginBottom: "8px" }}
-                  >
-                    {exp.year}
-                  </Card.Subtitle>
-                  <Card.Text style={{ fontSize: "0.95rem", color: "#555" }}>
-                    {exp.tagline}
-                  </Card.Text>
+                <Card className="front-card">
+                  <div className="icon">{exp.icon}</div>
+                  <Card.Title>{exp.company}</Card.Title>
+                  <Card.Subtitle>{exp.year}</Card.Subtitle>
+                  <Card.Text>{exp.tagline}</Card.Text>
                 </Card>
 
                 {/* Back */}
-                <Card
-                  style={{
-                    position: "absolute",
-                    width: "100%",
-                    height: "100%",
-                    backfaceVisibility: "hidden",
-                    borderRadius: "16px",
-                    backgroundColor: accentColor,
-                    color: "#fff",
-                    textAlign: "center",
-                    padding: "20px",
-                    transform: "rotateY(180deg)",
-                  }}
-                >
-                  <Card.Title style={{ fontWeight: 700 }}>{exp.role}</Card.Title>
-                  <Card.Text style={{ fontSize: "0.9rem", marginTop: "8px" }}>
-                    {exp.description}
-                  </Card.Text>
+                <Card className="back-card">
+                  <Card.Title>{exp.role}</Card.Title>
+                  <Card.Text>{exp.description}</Card.Text>
                 </Card>
               </div>
             </div>
@@ -198,14 +156,87 @@ function ExperienceWave() {
           100% { d: path("M0,60 C150,10 350,110 500,60 C650,10 850,110 1000,60"); }
         }
 
-        @media (max-width: 768px) {
-          div[style*="flex: 0 0"] {
-            transform: translateY(0) !important;
+        .exp-wrapper {
+          display: flex;
+          justify-content: center;
+          gap: clamp(20px, 6vw, 80px);
+          padding: 60px 0;
+          position: relative;
+          z-index: 1;
+          transition: gap .4s ease-in-out;
+        }
+
+        .exp-card {
+          flex: 0 0 clamp(200px, 22vw, 240px);
+          height: clamp(180px, 22vh, 220px);
+          transform-style: preserve-3d;
+          perspective: 1000px;
+          cursor: pointer;
+          transition: all .4s ease-in-out;
+        }
+
+        .even { transform: translateY(-50px); }
+        .odd { transform: translateY(50px); }
+
+        .flip-box {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          transform-style: preserve-3d;
+        }
+        .front-card, .back-card {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          backface-visibility: hidden;
+          border-radius: 16px;
+          text-align: center;
+          padding: 20px;
+          transition: background .35s ease-in-out;
+        }
+        .front-card {
+          background: #fff;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .front-card .icon {
+          font-size: 2rem;
+          color: ${accentColor};
+          margin-bottom: 10px;
+          transition: font-size .35s ease-in-out;
+        }
+        .back-card {
+          background: ${accentColor};
+          color: #fff;
+          transform: rotateY(180deg);
+        }
+
+        /* SMALL SCREENS */
+        @media (max-width: 576px) {
+          .wave-line { display: none; }
+          .exp-wrapper {
+            display: grid;
+            grid-template-columns: 1fr;
+            row-gap: 25px;
           }
-          div[style*="display: flex"][style*="justify-content: center"] {
-            flex-direction: column;
-            gap: 20px;
-            align-items: center;
+          .exp-card {
+            transform: translateY(0) !important;
+            width: 100% !important;
+            max-width: 330px;
+          }
+        }
+
+        /* MEDIUM SCREENS */
+        @media (min-width: 577px) and (max-width: 991px) {
+          .wave-line { display: none; }
+          .exp-wrapper {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+            justify-items: center;
+          }
+          .exp-card {
+            transform: translateY(0) !important;
+            max-width: 260px;
           }
         }
       `}</style>

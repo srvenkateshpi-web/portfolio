@@ -96,35 +96,40 @@ function Hobbies() {
       </Row>
 
       {/* Small screen adjustments only */}
-      <style>
-        {`
+    <style>
+{`
   @media (max-width: 576px) {
     .hobby-card {
-      padding: 6px !important; /* reduce padding */
+      padding: 8px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      height: 100% !important; /* maintain same height */
     }
     .hobby-img {
-      width: 35px !important;
-      height: 35px !important;
+      width: 40px !important;
+      height: 40px !important;
+      margin-bottom: 6px !important;
     }
     .hobby-title {
-      font-size: 0.45rem !important; /* small enough to fit one line */
-      white-space: nowrap !important;
-      overflow: hidden !important;
-      text-overflow: ellipsis !important;
+      font-size: 0.5rem !important; /* fits in one line */
+      text-align: center !important;
     }
     .hobby-row {
       display: flex !important;
       flex-wrap: nowrap !important;
       justify-content: center !important;
-      gap: 5px !important; /* smaller gap for better fit */
+      gap: 8px !important; /* slightly bigger gap */
     }
     .hobby-row > .col-4 {
-      flex: 1 1 auto !important;
-      max-width: calc(33.333% - 5px) !important; /* adjust for gap */
+      flex: 0 0 auto !important;
+      max-width: 36% !important; /* slightly wider cards */
+      display: flex !important;
     }
   }
 `}
-      </style>
+</style>
+
     </Container>
   );
 }
