@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import {
   FaEnvelope,
@@ -6,7 +6,7 @@ import {
   FaGithub,
   FaFileDownload,
 } from "react-icons/fa";
-import resumePDF from "../assets/resume.pdf"; // import PDF from src/assets
+import resumePDF from "../assets/resume.pdf";
 
 const accentColor = "#fd0054";
 
@@ -14,10 +14,7 @@ const socialButtons = [
   { icon: <FaEnvelope />, href: "mailto:subernasrajaram@gmail.com" },
   { icon: <FaLinkedin />, href: "https://linkedin.com/in/suberna-rajaram" },
   { icon: <FaGithub />, href: "https://github.com/Suberna" },
-  {
-    icon: <FaFileDownload />,
-    href: resumePDF, // use imported PDF
-  },
+  { icon: <FaFileDownload />, href: resumePDF },
 ];
 
 const quickLinks = [
@@ -29,6 +26,30 @@ const quickLinks = [
 ];
 
 function Contact() {
+  const [status, setStatus] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("Sending...");
+
+    const formData = new FormData(e.target);
+    formData.append("access_key", "39c6c64a-fe05-4ae5-804a-ab182f538d03"); // << replace with your key
+
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      setStatus("✔ Message sent successfully!");
+      e.target.reset();
+    } else {
+      setStatus("❌ Something went wrong. Please try again.");
+    }
+  };
+
   return (
     <section className="bg-dark text-white mt-5 pt-5" id="contact">
       <Container>
@@ -53,7 +74,7 @@ function Contact() {
         </p>
 
         <Row className="justify-content-between">
-          {/* Social Icons */}
+          {/* Social Buttons */}
           <Col md={3} className="mb-3">
             <h5>Find Me</h5>
             <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
@@ -61,7 +82,7 @@ function Contact() {
                 <a
                   key={idx}
                   href={btn.href}
-                  target={btn.href.startsWith("mailto:") ? "_self" : "_blank"} // open in new tab
+                  target={btn.href.startsWith("mailto:") ? "_self" : "_blank"}
                   rel="noopener noreferrer"
                   style={{
                     background: "#18181b",
@@ -111,13 +132,14 @@ function Contact() {
             </ul>
           </Col>
 
-          {/* Contact Form */}
+          {/* Contact Form (updated) */}
           <Col md={5} className="mb-3">
             <h5>Send a Message</h5>
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-2">
                 <Form.Control
                   type="text"
+                  name="name"
                   placeholder="Enter your full name"
                   style={{
                     backgroundColor: "#232329",
@@ -129,9 +151,11 @@ function Contact() {
                   required
                 />
               </Form.Group>
+
               <Form.Group className="mb-2">
                 <Form.Control
                   type="email"
+                  name="email"
                   placeholder="Enter your email address"
                   style={{
                     backgroundColor: "#232329",
@@ -143,9 +167,11 @@ function Contact() {
                   required
                 />
               </Form.Group>
+
               <Form.Group className="mb-2">
                 <Form.Control
                   as="textarea"
+                  name="message"
                   rows={3}
                   placeholder="Type your message here"
                   style={{
@@ -158,6 +184,7 @@ function Contact() {
                   required
                 />
               </Form.Group>
+
               <Button
                 type="submit"
                 style={{
@@ -169,11 +196,14 @@ function Contact() {
                 Send Message
               </Button>
             </Form>
+
+            {status && (
+              <p style={{ marginTop: "10px", color: accentColor }}>{status}</p>
+            )}
           </Col>
         </Row>
 
         <hr className="border-white-50 my-4" />
-
         <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
           <p className="mb-2 mb-sm-0">
             © 2025 Suberna R S. All Rights Reserved.
@@ -181,7 +211,6 @@ function Contact() {
         </div>
       </Container>
 
-      {/* Global placeholder CSS */}
       <style>
         {`
           ::placeholder {

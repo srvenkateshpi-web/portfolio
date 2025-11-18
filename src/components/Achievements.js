@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Container, Card } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import {
   FaTrophy,
   FaMedal,
@@ -9,7 +9,6 @@ import {
   FaUserTie,
 } from "react-icons/fa";
 
-// Local images
 import vihasanImg from "../assets/vihasan.JPG";
 import hackImg from "../assets/hack.JPG";
 import avdImg from "../assets/avd.JPG";
@@ -20,134 +19,97 @@ const accentColor = "#fd0054";
 const achievements = [
   {
     icon: <FaTrophy />,
-    text: (
-      <>
-        <strong style={{ color: accentColor }}>HackXelerators Award</strong> -
-        HackXelerate 2025 (
-        <span style={{ color: accentColor }}>₹2000 cash prize</span>)
-      </>
-    ),
+    text: "HackXelerators Award - HackXelerate 2025 (₹2000 cash prize)",
+    note: "HackXelerators ✨",
+    highlight: ["HackXelerators Award", "₹2000 cash prize"],
     image: hackImg,
   },
   {
     icon: <FaMedal />,
-    text: (
-      <>
-        <strong style={{ color: accentColor }}>Best Project Award</strong> -
-        Vihansa Hackathon 2025 (
-        <span style={{ color: accentColor }}>₹3000 cash prize</span>)
-      </>
-    ),
+    text: "Best Project Award - Vihansa Hackathon 2025 (₹3000 cash prize)",
+    note: "Vihansa Winner 🏅",
+    highlight: ["Best Project Award", "₹3000 cash prize"],
     image: vihasanImg,
   },
   {
     icon: <FaStar />,
-    text: (
-      <>
-        <strong style={{ color: accentColor }}>Best Paper Award</strong> -
-        DigiTechCON'25 Conference
-      </>
-    ),
+    text: "Best Paper Award - DigiTechCON'25 Conference",
+    note: "Published 📃",
+    highlight: ["Best Paper Award"],
     image:
-      "https://whitecloud-solutions.com/wp-content/uploads/2012/10/presentation.png",
+      "https://sdmcbm.ac.in/wp-content/uploads/2024/09/unnamed-7-1024x768.jpg",
   },
   {
     icon: <FaPeopleCarry />,
-    text: (
-      <>
-        <strong style={{ color: accentColor }}>Finalist</strong> - National
-        Level Hackathon Advaya 2025
-      </>
-    ),
+    text: "Finalist - National Level Hackathon Advaya 2025",
+    note: "Top Finalist 💡",
+    highlight: ["Finalist"],
     image: avdImg,
   },
   {
     icon: <FaCalendarAlt />,
-    text: (
-      <>
-        Organized{" "}
-        <strong style={{ color: accentColor }}>Google DevFest 2024</strong>,
-        Salem
-      </>
-    ),
+    text: "Organized Google DevFest 2024, Salem",
+    note: "Organizer 🔥",
+    highlight: ["Google DevFest 2024"],
     image: devImg,
   },
   {
     icon: <FaUserTie />,
-    text: (
-      <>
-        <strong style={{ color: accentColor }}>Treasurer</strong>, Rotaract Club
-        of Salem Metropolis (2024–2025)
-      </>
-    ),
+    text: "Treasurer, Rotaract Club of Salem Metropolis (2024–2025)",
+    note: "Leadership 🧩",
+    highlight: ["Treasurer"],
     image:
       "https://sdmcbm.ac.in/wp-content/uploads/2024/09/unnamed-7-1024x768.jpg",
   },
 ];
 
+function highlightText(text, words) {
+  let newStr = text;
+  words.forEach((word) => {
+    newStr = newStr.replace(
+      word,
+      `<span style="color:${accentColor}; font-weight:700">${word}</span>`
+    );
+  });
+  return newStr;
+}
+
 function Achievements() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [inView, setInView] = useState(false); // track if the section is visible
   const timerRef = useRef(null);
-  const timelineRef = useRef(null);
 
   useEffect(() => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % achievements.length);
-    }, 2000);
+    startAutoSlide();
     return () => clearInterval(timerRef.current);
   }, []);
 
-  // Intersection Observer to detect scroll into view
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.disconnect(); // optional: disconnect after first trigger
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    if (timelineRef.current) observer.observe(timelineRef.current);
-
-    return () => observer.disconnect();
-  }, []);
-
-  const handleMouseEnter = (idx) => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    setActiveIndex(idx);
-  };
-
-  const handleMouseLeave = () => {
+  const startAutoSlide = () => {
     timerRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % achievements.length);
-    }, 2000);
+    }, 2200);
   };
 
-  const getRotation = (offset) => (offset % 2 === 0 ? 6 : -6);
+  const stopAutoSlide = () => clearInterval(timerRef.current);
 
   return (
     <Container
-      fluid
       id="achievements"
+      fluid
       className="py-5"
       style={{
-        background: "linear-gradient(135deg, #232329 0%, #1a1a22 100%)",
-        padding: "60px 40px",
+        background: "linear-gradient(135deg, #232329, #1a1a22)",
         fontFamily: "'Poppins', sans-serif",
+        padding: "70px 42px",
       }}
     >
       <h2
         style={{
           textAlign: "center",
-          marginBottom: "3rem",
-          fontWeight: "700",
+          marginBottom: "3.2rem",
+          fontWeight: 700,
+          fontSize: "2.3rem",
           color: accentColor,
-          letterSpacing: 2,
-          fontSize: "2.2rem",
+          letterSpacing: "1.5px",
           position: "relative",
         }}
       >
@@ -158,7 +120,8 @@ function Achievements() {
             bottom: "-14px",
             left: "50%",
             transform: "translateX(-50%)",
-            width: "70px",
+            display: "block",
+            width: "75px",
             height: "3px",
             backgroundColor: accentColor,
             borderRadius: "2px",
@@ -167,183 +130,165 @@ function Achievements() {
       </h2>
 
       <div
-        ref={timelineRef}
         style={{
-          position: "relative",
           maxWidth: "1300px",
           margin: "0 auto",
           display: "flex",
-          gap: "60px",
+          gap: "65px",
           flexWrap: "wrap",
-          alignItems: "center",
           justifyContent: "center",
+          alignItems: "center",
+          position: "relative",
         }}
       >
-        {/* Timeline list */}
+        {/* Timeline Text */}
         <div
           style={{
-            flex: "1 1 400px",
+            flex: "1 1 420px",
+            paddingLeft: "55px",
             position: "relative",
-            paddingLeft: "60px",
           }}
         >
           <div
             style={{
               position: "absolute",
               top: 0,
-              left: 30,
+              left: 28,
               width: "6px",
               height: "100%",
               background: `linear-gradient(0deg, ${accentColor}, transparent)`,
               borderRadius: "3px",
             }}
           />
-          {achievements.map(({ icon, text }, idx) => (
+
+          {achievements.map((item, idx) => (
             <div
               key={idx}
-              onMouseEnter={() => handleMouseEnter(idx)}
-              onFocus={() => handleMouseEnter(idx)}
-              onMouseLeave={handleMouseLeave}
-              tabIndex={0}
-              className={inView ? "animate-text" : ""}
+              onMouseEnter={() => {
+                stopAutoSlide();
+                setActiveIndex(idx);
+              }}
+              onMouseLeave={startAutoSlide}
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "24px",
-                marginBottom: idx !== achievements.length - 1 ? "48px" : 0,
+                gap: "22px",
+                marginBottom: idx !== achievements.length - 1 ? "44px" : "0px",
                 cursor: "pointer",
-                outline: "none",
-                color: idx === activeIndex ? "#fff" : "#aaa",
+                color: idx === activeIndex ? "#fff" : "#9c9c9c",
                 fontWeight: 600,
-                fontSize: "1rem",
-                transition: "color 0.4s",
-                position: "relative",
-                zIndex: 10,
+                transition: "color .4s ease",
               }}
             >
               <div
                 style={{
-                  minWidth: 38,
-                  height: 38,
-                  backgroundColor: idx === activeIndex ? accentColor : "#666",
+                  minWidth: 36,
+                  height: 36,
                   borderRadius: "50%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  background: idx === activeIndex ? accentColor : "#555",
                   color: "#fff",
+                  fontSize: "17px",
+                  transition: "all .35s",
                   boxShadow:
-                    idx === activeIndex ? `0 0 12px ${accentColor}80` : "none",
-                  fontSize: "18px",
-                  flexShrink: 0,
-                  transition: "all 0.4s",
-                  animation: idx === activeIndex ? "pulse 2s infinite" : "none",
+                    idx === activeIndex ? `0 0 12px ${accentColor}70` : "none",
                 }}
               >
-                {icon}
+                {item.icon}
               </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
+              <span
+                style={{ lineHeight: "1.35rem", fontSize: "0.97rem" }}
+                dangerouslySetInnerHTML={{
+                  __html: highlightText(item.text, item.highlight),
                 }}
-              >
-                <span>{text}</span>
-                {idx === activeIndex && (
-                  <span
-                    style={{
-                      display: "block",
-                      height: "4px",
-                      marginTop: "4px",
-                      borderRadius: "2px",
-                      background: `linear-gradient(90deg, transparent, ${accentColor})`,
-                      transition: "all 0.4s",
-                    }}
-                  />
-                )}
-              </div>
+              />
             </div>
           ))}
         </div>
 
-        {/* Cards */}
+        {/* Polaroid Stack With Handwritten Note */}
         <div
+          className="polaroid-stack"
           style={{
-            flex: "1 1 400px",
+            flex: "1 1 420px",
             position: "relative",
-            width: "400px",
-            height: "250px",
+            height: "310px",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            marginLeft: "auto",
           }}
         >
           {[2, 1, 0].map((offset, i) => {
             const idx = (activeIndex + offset) % achievements.length;
-            const scale = offset === 0 ? 1 : offset === 1 ? 0.96 : 0.92;
-            const top = offset === 0 ? 0 : offset === 1 ? 10 : 20;
-            const zIndex = 3 - offset;
+            const rotate = offset === 1 ? -4 : offset === 2 ? 5 : 0;
+
             return (
-              <Card
+              <div
                 key={i}
                 style={{
-                  width: "400px",
-                  height: "250px",
-                  boxShadow: `0 5px 18px ${accentColor}${
-                    offset === 0 ? "66" : offset === 1 ? "33" : "22"
-                  }`,
-                  borderRadius: "16px",
-                  overflow: "hidden",
                   position: "absolute",
-                  top: `${top}px`,
+                  width: "88%",
+                  maxWidth: "360px",
+                  background: "#fff",
+                  borderRadius: "6px",
+                  padding: "10px 10px 14px",
+                  boxShadow:
+                    offset === 0
+                      ? "0 8px 24px rgba(0,0,0,0.45)"
+                      : "0 5px 14px rgba(0,0,0,0.28)",
+                  transform: `translateX(-50%) rotate(${rotate}deg)`,
                   left: "50%",
-                  transform: `translateX(-50%) rotate(${getRotation(
-                    activeIndex + offset
-                  )}deg) scale(${scale})`,
-                  transition: "all 0.6s ease",
-                  zIndex,
-                  backgroundColor: "#111",
+                  top: offset * 14,
+                  transition: "all .5s",
+                  zIndex: 10 - offset,
                   cursor: "pointer",
                 }}
-                onMouseEnter={() => handleMouseEnter(idx)}
               >
-                <Card.Img
-                  src={achievements[idx]?.image}
-                  alt={`Achievement ${idx}`}
-                  style={{ height: "250px", objectFit: "cover" }}
+                <img
+                  src={achievements[idx].image}
+                  alt=""
+                  style={{
+                    width: "100%",
+                    height: "210px",
+                    objectFit: "cover",
+                    borderRadius: "4px",
+                  }}
                 />
-              </Card>
+                <div
+                  style={{
+                    fontFamily: "'Handlee', cursive",
+                    fontSize: "1rem",
+                    color: "#222",
+                    marginTop: "6px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    opacity: offset === 0 ? 1 : 0.45,
+                  }}
+                >
+                  📌 {achievements[idx].note}
+                </div>
+              </div>
             );
           })}
         </div>
       </div>
 
       <style>{`
-        @keyframes pulse {
-          0% { box-shadow: 0 0 0 rgba(253,0,84,0.4); }
-          70% { box-shadow: 0 0 12px rgba(253,0,84,0.6); }
-          100% { box-shadow: 0 0 0 rgba(253,0,84,0.4); }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
 
-        div[tabindex="0"]:focus {
-          outline: none;
-          background-color: rgba(253,0,84,0.1);
-          border-radius: 8px;
-        }
-
-        /* Scroll-based entry animation */
-        .animate-text span {
-          display: inline-block;
-          transform: translateX(-50px);
-          opacity: 0;
-          animation: slideIn 0.8s forwards;
-        }
-
-        @keyframes slideIn {
-          to {
-            transform: translateX(0);
-            opacity: 1;
+        @media (max-width: 768px) {
+          span {
+            font-size: .85rem !important;
+          }
+          .polaroid-stack {
+            height: 260px !important;
+          }
+          .polaroid-stack img {
+            height: 180px !important;
           }
         }
       `}</style>
